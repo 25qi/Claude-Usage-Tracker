@@ -130,6 +130,7 @@
 "notifications.threshold.high" = "Hohe Nutzung";
 "notifications.threshold.critical" = "Kritisch";
 "notifications.threshold.session_reset" = "Sitzungszurücksetzung";
+"notifications.threshold.weekly_reset" = "Wochenzurücksetzung";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -210,6 +211,10 @@
 "notification.session_critical.message" = "Sie haben %@ Ihres 5-Stunden-Sitzungslimits verwendet! %@";
 "notification.session_reset.title" = "Sitzung Zurückgesetzt";
 "notification.session_reset.message" = "Ihre Sitzung wurde zurückgesetzt! Sie haben jetzt eine neue 5-Stunden-Sitzung verfügbar.";
+"notification.session_reset.message_time" = "Ihre Sitzung wurde zurückgesetzt! Sie haben jetzt eine neue 5-Stunden-Sitzung verfügbar. Nächste Zurücksetzung: %@.";
+"notification.weekly_reset.title" = "Wochenzurücksetzung";
+"notification.weekly_reset.message" = "Ihr Wochenlimit wurde zurückgesetzt! Nächste Zurücksetzung: %@.";
+"notification.weekly_reset.message_no_time" = "Ihr Wochenlimit wurde zurückgesetzt!";
 "notification.session_auto_started.title" = "Sitzung Automatisch Gestartet";
 "notification.session_auto_started.message" = "Eine neue Sitzung wurde automatisch mit Claude initialisiert. Ihre 5-Stunden-Sitzung ist bereit!";
 "notification.session_auto_start_failed.title" = "Auto-Start Fehlgeschlagen";

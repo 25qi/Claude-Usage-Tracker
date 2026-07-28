@@ -137,6 +137,7 @@
 "notifications.threshold.high" = "使用量過高";
 "notifications.threshold.critical" = "嚴重";
 "notifications.threshold.session_reset" = "Session 重置";
+"notifications.threshold.weekly_reset" = "週限重置";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -232,6 +233,10 @@
 "notification.session_critical.message" = "您已使用 5 小時 Session 限制的 %@！%@";
 "notification.session_reset.title" = "Session 重置";
 "notification.session_reset.message" = "您的 Session 已重置！您現在有一個全新的 5 小時 Session 可用。";
+"notification.session_reset.message_time" = "您的 5 小時額度已重置！下次重置：%@。";
+"notification.weekly_reset.title" = "週限重置";
+"notification.weekly_reset.message" = "您的每週額度已重置！下次重置：%@。";
+"notification.weekly_reset.message_no_time" = "您的每週額度已重置！";
 "notification.session_auto_started.title" = "Session 自動啟動";
 "notification.session_auto_started.message" = "新 Session 已自動初始化。您全新的 5 小時 Session 已就緒！";
 "notification.session_auto_start_failed.title" = "自動啟動失敗";

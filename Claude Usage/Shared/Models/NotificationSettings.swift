@@ -15,6 +15,10 @@ struct NotificationSettings: Codable, Equatable {
     var threshold95Enabled: Bool
     var soundName: String
     var customThresholds: [Int]
+    /// Whether to notify when the 5-hour session limit resets
+    var sessionResetEnabled: Bool
+    /// Whether to notify when the weekly limit resets
+    var weeklyResetEnabled: Bool
 
     /// All active thresholds (built-in + custom), sorted ascending
     var sortedThresholds: [Int] {
@@ -44,7 +48,9 @@ struct NotificationSettings: Codable, Equatable {
         threshold90Enabled: Bool = true,
         threshold95Enabled: Bool = true,
         soundName: String = "default",
-        customThresholds: [Int] = []
+        customThresholds: [Int] = [],
+        sessionResetEnabled: Bool = true,
+        weeklyResetEnabled: Bool = true
     ) {
         self.enabled = enabled
         self.threshold75Enabled = threshold75Enabled
@@ -52,6 +58,8 @@ struct NotificationSettings: Codable, Equatable {
         self.threshold95Enabled = threshold95Enabled
         self.soundName = soundName
         self.customThresholds = customThresholds
+        self.sessionResetEnabled = sessionResetEnabled
+        self.weeklyResetEnabled = weeklyResetEnabled
     }
 
     // Backwards-compatible decoding for existing saved settings
@@ -63,5 +71,8 @@ struct NotificationSettings: Codable, Equatable {
         threshold95Enabled = try container.decode(Bool.self, forKey: .threshold95Enabled)
         soundName = try container.decodeIfPresent(String.self, forKey: .soundName) ?? "default"
         customThresholds = try container.decodeIfPresent([Int].self, forKey: .customThresholds) ?? []
+        // 舊版設定沒有這兩個欄位,解碼時預設為開啟
+        sessionResetEnabled = try container.decodeIfPresent(Bool.self, forKey: .sessionResetEnabled) ?? true
+        weeklyResetEnabled = try container.decodeIfPresent(Bool.self, forKey: .weeklyResetEnabled) ?? true
     }
 }

@@ -9,6 +9,10 @@ class NotificationManager: NotificationServiceProtocol {
     // Track previous session percentage per profile to detect resets
     private var previousSessionPercentages: [String: Double] = [:]
 
+    // 追蹤每個 profile 的週限用量與 reset 時間,用來偵測週限重置
+    private var previousWeeklyPercentages: [String: Double] = [:]
+    private var lastKnownWeeklyResetTimes: [String: Date] = [:]
+
     // Track which notifications have been sent to prevent duplicates
     // Persisted to UserDefaults to survive app restarts
     private var sentNotifications: Set<String> {
@@ -136,19 +140,25 @@ class NotificationManager: NotificationServiceProtocol {
             // Clear all sent notifications for this profile to allow re-notification in new session
             sentNotifications = sentNotifications.filter { !$0.hasPrefix(profileName) }
 
-            sendProfileAlert(
-                profileName: profileName,
-                type: .sessionReset,
-                percentage: sessionPercentage,
-                resetTime: usage.sessionResetTime,
-                soundName: settings.soundName
-            )
+            // 5 小時窗重置通知,可由設定單獨開關
+            if settings.sessionResetEnabled {
+                sendProfileAlert(
+                    profileName: profileName,
+                    type: .sessionReset,
+                    percentage: sessionPercentage,
+                    resetTime: usage.sessionResetTime,
+                    soundName: settings.soundName
+                )
+            }
 
             // Note: Auto-start session is handled per-profile but called from elsewhere
         }
 
         // Update previous percentage for this specific profile
         previousSessionPercentages[profileName] = sessionPercentage
+
+        // 偵測週限重置:用量從 >0 歸零,或已越過上次記錄的 reset 時間點
+        checkWeeklyReset(usage: usage, profileName: profileName, settings: settings)
 
         // Check thresholds (highest first) - includes both built-in and custom
         let thresholds = settings.sortedThresholds
@@ -175,6 +185,59 @@ class NotificationManager: NotificationServiceProtocol {
             }
         }
     }
+
+    /// Detects a weekly limit reset and sends a notification if enabled
+    private func checkWeeklyReset(usage: ClaudeUsage, profileName: String, settings: NotificationSettings) {
+        let weeklyPercentage = usage.weeklyPercentage
+        let previousWeekly = previousWeeklyPercentages[profileName]
+        let lastKnownReset = lastKnownWeeklyResetTimes[profileName]
+
+        // 條件一:週限用量從 >0 歸零
+        let droppedToZero = (previousWeekly ?? 0.0) > 0.0 && weeklyPercentage == 0.0
+
+        // 條件二:上次記錄的 reset 時間點已到,且 API 回報了更新的 reset 時間
+        let resetTimePassed: Bool = {
+            guard let lastKnownReset else { return false }
+            return lastKnownReset <= Date() && usage.weeklyResetTime > lastKnownReset
+        }()
+
+        if settings.weeklyResetEnabled && (droppedToZero || resetTimePassed) {
+            sendProfileAlert(
+                profileName: profileName,
+                type: .weeklyReset,
+                percentage: weeklyPercentage,
+                // 用新 reset 時間當 threshold level,確保每個週期的通知識別碼唯一
+                thresholdLevel: Int(usage.weeklyResetTime.timeIntervalSince1970),
+                resetTime: usage.weeklyResetTime,
+                soundName: settings.soundName
+            )
+        }
+
+        // 更新追蹤狀態(無論是否發通知都要更新,避免重複觸發)
+        previousWeeklyPercentages[profileName] = weeklyPercentage
+        lastKnownWeeklyResetTimes[profileName] = usage.weeklyResetTime
+    }
+
+    #if DEBUG
+    /// Simulates a session and weekly reset to manually verify reset notifications (testing only)
+    func simulateResetNotificationsForTesting() {
+        let profileName = "ResetTest"
+        let settings = NotificationSettings()
+
+        // 先餵一筆有用量的資料,建立「前次狀態」
+        var before = ClaudeUsage.empty
+        before.sessionPercentage = 42
+        before.weeklyPercentage = 37
+        checkAndNotify(usage: before, profileName: profileName, settings: settings)
+
+        // 再餵一筆歸零的資料,同時觸發 5 小時窗與週限的重置通知
+        var after = ClaudeUsage.empty
+        after.sessionPercentage = 0
+        after.weeklyPercentage = 0
+        after.weeklyResetTime = before.weeklyResetTime.addingTimeInterval(7 * 24 * 60 * 60)
+        checkAndNotify(usage: after, profileName: profileName, settings: settings)
+    }
+    #endif
 
     /// Checks usage and sends appropriate alerts (legacy, for backwards compatibility)
     func checkAndNotify(usage: ClaudeUsage) {
@@ -367,6 +430,7 @@ extension NotificationManager {
         case sessionWarning = "session_warning"  // 90% threshold
         case sessionCritical = "session_critical"  // 95% threshold
         case sessionReset = "session_reset"
+        case weeklyReset = "weekly_reset"
         case sessionAutoStarted = "session_auto_started"
         case sessionAutoStartFailed = "session_auto_start_failed"
         case weeklyWarning = "weekly_warning"
@@ -386,6 +450,8 @@ extension NotificationManager {
                 return "notification.session_critical.title".localized
             case .sessionReset:
                 return "notification.session_reset.title".localized
+            case .weeklyReset:
+                return "notification.weekly_reset.title".localized
             case .sessionAutoStarted:
                 return "notification.session_auto_started.title".localized
             case .sessionAutoStartFailed:
@@ -417,7 +483,16 @@ extension NotificationManager {
             case .sessionCritical:
                 return "notification.session_critical.message".localized(with: percentStr, resetStr)
             case .sessionReset:
+                // 有下一次 reset 時間就用含時間的文案,否則沿用舊文案
+                if let resetTime {
+                    return "notification.session_reset.message_time".localized(with: FormatterHelper.resetDateTime(from: resetTime))
+                }
                 return "notification.session_reset.message".localized
+            case .weeklyReset:
+                if let resetTime {
+                    return "notification.weekly_reset.message".localized(with: FormatterHelper.resetDateTime(from: resetTime))
+                }
+                return "notification.weekly_reset.message_no_time".localized
             case .sessionAutoStarted:
                 return "notification.session_auto_started.message".localized
             case .sessionAutoStartFailed:

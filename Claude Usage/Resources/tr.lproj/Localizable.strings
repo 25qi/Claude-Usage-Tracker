@@ -136,6 +136,7 @@
 "notifications.threshold.high" = "Yüksek Kullanım";
 "notifications.threshold.critical" = "Kritik";
 "notifications.threshold.session_reset" = "Oturum Sıfırlama";
+"notifications.threshold.weekly_reset" = "Haftalık Sıfırlama";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -231,6 +232,10 @@
 "notification.session_critical.message" = "5 saatlik oturum limitinizin %@'ını kullandınız! %@";
 "notification.session_reset.title" = "Oturum Sıfırlandı";
 "notification.session_reset.message" = "Oturumunuz sıfırlandı! Artık yeni bir 5 saatlik oturumunuz mevcut.";
+"notification.session_reset.message_time" = "Oturumunuz sıfırlandı! Artık yeni bir 5 saatlik oturumunuz mevcut. Sonraki sıfırlama: %@.";
+"notification.weekly_reset.title" = "Haftalık Sıfırlama";
+"notification.weekly_reset.message" = "Haftalık limitiniz sıfırlandı! Sonraki sıfırlama: %@.";
+"notification.weekly_reset.message_no_time" = "Haftalık limitiniz sıfırlandı!";
 "notification.session_auto_started.title" = "Oturum Otomatik Başlatıldı";
 "notification.session_auto_started.message" = "Yeni bir oturum otomatik olarak başlatıldı. 5 saatlik yeni oturumunuz hazır!";
 "notification.session_auto_start_failed.title" = "Otomatik Başlatma Başarısız";

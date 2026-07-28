@@ -171,7 +171,33 @@ struct GeneralSettingsView: View {
                                                 }
                                             )
                                         )
-                                        ThresholdIndicator(level: "0%", color: SettingsColors.usageLow, label: "notifications.threshold.session_reset".localized)
+                                        // 重置通知:5 小時窗與週限可分別開關
+                                        ThresholdToggleRow(
+                                            level: "0%",
+                                            color: SettingsColors.usageLow,
+                                            label: "notifications.threshold.session_reset".localized,
+                                            isOn: Binding(
+                                                get: { profile.notificationSettings.sessionResetEnabled },
+                                                set: { newValue in
+                                                    var updated = profile
+                                                    updated.notificationSettings.sessionResetEnabled = newValue
+                                                    profileManager.updateProfile(updated)
+                                                }
+                                            )
+                                        )
+                                        ThresholdToggleRow(
+                                            level: "0%",
+                                            color: SettingsColors.usageLow,
+                                            label: "notifications.threshold.weekly_reset".localized,
+                                            isOn: Binding(
+                                                get: { profile.notificationSettings.weeklyResetEnabled },
+                                                set: { newValue in
+                                                    var updated = profile
+                                                    updated.notificationSettings.weeklyResetEnabled = newValue
+                                                    profileManager.updateProfile(updated)
+                                                }
+                                            )
+                                        )
                                     }
                                 }
 

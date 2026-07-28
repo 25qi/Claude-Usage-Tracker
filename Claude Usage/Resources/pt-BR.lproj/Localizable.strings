@@ -128,6 +128,7 @@
 "notifications.threshold.high" = "Uso Alto";
 "notifications.threshold.critical" = "Crítico";
 "notifications.threshold.session_reset" = "Reinício de Sessão";
+"notifications.threshold.weekly_reset" = "Reinício Semanal";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -208,6 +209,10 @@
 "notification.session_critical.message" = "Você usou %@ do seu limite de sessão de 5 horas! %@";
 "notification.session_reset.title" = "Sessão Reiniciada";
 "notification.session_reset.message" = "Sua sessão foi reiniciada! Você agora tem uma nova sessão de 5 horas disponível.";
+"notification.session_reset.message_time" = "Sua sessão foi reiniciada! Você agora tem uma nova sessão de 5 horas disponível. Próximo reinício: %@.";
+"notification.weekly_reset.title" = "Reinício Semanal";
+"notification.weekly_reset.message" = "Seu limite semanal foi reiniciado! Próximo reinício: %@.";
+"notification.weekly_reset.message_no_time" = "Seu limite semanal foi reiniciado!";
 "notification.session_auto_started.title" = "Sessão Iniciada Automaticamente";
 "notification.session_auto_started.message" = "Uma nova sessão foi inicializada automaticamente com o Claude. Sua nova sessão de 5 horas está pronta!";
 "notification.session_auto_start_failed.title" = "Falha no Início Automático";

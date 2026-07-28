@@ -136,6 +136,7 @@
 "notifications.threshold.high" = "High Usage";
 "notifications.threshold.critical" = "Critical";
 "notifications.threshold.session_reset" = "Session Reset";
+"notifications.threshold.weekly_reset" = "Weekly Reset";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -231,6 +232,10 @@
 "notification.session_critical.message" = "You've used %@ of your 5-hour session limit! %@";
 "notification.session_reset.title" = "Session Reset";
 "notification.session_reset.message" = "Your session has reset! You now have a fresh 5-hour session available.";
+"notification.session_reset.message_time" = "Your session has reset! You now have a fresh 5-hour session available. Next reset: %@.";
+"notification.weekly_reset.title" = "Weekly Reset";
+"notification.weekly_reset.message" = "Your weekly limit has reset! Next reset: %@.";
+"notification.weekly_reset.message_no_time" = "Your weekly limit has reset!";
 "notification.session_auto_started.title" = "Session Auto-Started";
 "notification.session_auto_started.message" = "A new session has been automatically initialized. Your fresh 5-hour session is ready!";
 "notification.session_auto_start_failed.title" = "Auto-Start Failed";

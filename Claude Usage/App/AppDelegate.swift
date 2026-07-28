@@ -75,6 +75,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             SharedDataStore.shared.saveFirstLaunchDate(Date().addingTimeInterval(-2 * 24 * 60 * 60))
         }
 
+        // TESTING: Check for launch argument to manually trigger reset notifications
+        #if DEBUG
+        if CommandLine.arguments.contains("--test-reset-notifications") {
+            // 延遲幾秒,等通知權限請求完成後再觸發
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                NotificationManager.shared.simulateResetNotificationsForTesting()
+            }
+        }
+        #endif
+
         // TESTING: Check for launch argument to force feedback prompt
         if CommandLine.arguments.contains("--show-feedback-prompt") {
             SharedDataStore.shared.resetFeedbackPromptForTesting()

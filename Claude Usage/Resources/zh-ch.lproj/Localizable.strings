@@ -137,6 +137,7 @@
 "notifications.threshold.high" = "使用量过高";
 "notifications.threshold.critical" = "严重";
 "notifications.threshold.session_reset" = "会话重置";
+"notifications.threshold.weekly_reset" = "周限重置";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -232,6 +233,10 @@
 "notification.session_critical.message" = "您已使用 5小时会话限制的 %@！%@";
 "notification.session_reset.title" = "会话重置";
 "notification.session_reset.message" = "您的会话已重置！您现在有一个全新的 5小时会话可用。";
+"notification.session_reset.message_time" = "您的 5 小时额度已重置！下次重置：%@。";
+"notification.weekly_reset.title" = "周限重置";
+"notification.weekly_reset.message" = "您的每周额度已重置！下次重置：%@。";
+"notification.weekly_reset.message_no_time" = "您的每周额度已重置！";
 "notification.session_auto_started.title" = "会话自动启动";
 "notification.session_auto_started.message" = "新会话已自动初始化。您全新的 5小时会话已就绪！";
 "notification.session_auto_start_failed.title" = "自动启动失败";

@@ -130,6 +130,7 @@
 "notifications.threshold.high" = "使用量が多い";
 "notifications.threshold.critical" = "クリティカル";
 "notifications.threshold.session_reset" = "セッションリセット";
+"notifications.threshold.weekly_reset" = "週次リセット";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -224,6 +225,10 @@
 "notification.session_critical.message" = "5時間セッション制限の%@を使用しました！%@";
 "notification.session_reset.title" = "セッションリセット";
 "notification.session_reset.message" = "セッションがリセットされました！新しい5時間セッションが利用可能です。";
+"notification.session_reset.message_time" = "セッションがリセットされました！新しい5時間セッションが利用可能です。次回リセット：%@";
+"notification.weekly_reset.title" = "週次リセット";
+"notification.weekly_reset.message" = "週次の上限がリセットされました！次回リセット：%@";
+"notification.weekly_reset.message_no_time" = "週次の上限がリセットされました！";
 "notification.session_auto_started.title" = "セッション自動開始";
 "notification.session_auto_started.message" = "Claudeで新しいセッションが自動的に初期化されました。新しい5時間セッションの準備ができました！";
 "notification.session_auto_start_failed.title" = "自動開始失敗";

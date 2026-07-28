@@ -110,6 +110,7 @@
 "notifications.threshold.high" = "Uso Alto";
 "notifications.threshold.critical" = "Crítico";
 "notifications.threshold.session_reset" = "Reinicio de Sesión";
+"notifications.threshold.weekly_reset" = "Reinicio Semanal";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -145,6 +146,10 @@
 "notification.session_critical.message" = "¡Has usado %@ de tu límite de sesión de 5 horas! %@";
 "notification.session_reset.title" = "Sesión Reiniciada";
 "notification.session_reset.message" = "¡Tu sesión se ha reiniciado! Ahora tienes una sesión de 5 horas nueva disponible.";
+"notification.session_reset.message_time" = "¡Tu sesión se ha reiniciado! Ahora tienes una sesión de 5 horas nueva disponible. Próximo reinicio: %@.";
+"notification.weekly_reset.title" = "Reinicio Semanal";
+"notification.weekly_reset.message" = "¡Tu límite semanal se ha reiniciado! Próximo reinicio: %@.";
+"notification.weekly_reset.message_no_time" = "¡Tu límite semanal se ha reiniciado!";
 "notification.session_auto_started.title" = "Sesión Iniciada Automáticamente";
 "notification.session_auto_started.message" = "Una nueva sesión ha sido iniciada automáticamente. ¡Tu sesión de 5 horas está lista!";
 "notification.session_auto_start_failed.title" = "Inicio Automático Fallido";

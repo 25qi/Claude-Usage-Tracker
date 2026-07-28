@@ -136,6 +136,7 @@
 "notifications.threshold.high" = "Високе використання";
 "notifications.threshold.critical" = "Критичне";
 "notifications.threshold.session_reset" = "Скидання сесії";
+"notifications.threshold.weekly_reset" = "Тижневе скидання";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -231,6 +232,10 @@
 "notification.session_critical.message" = "Ви використали %@ ліміту 5-годинної сесії! %@";
 "notification.session_reset.title" = "Сесію скинуто";
 "notification.session_reset.message" = "Вашу сесію скинуто! Тепер доступна нова 5-годинна сесія.";
+"notification.session_reset.message_time" = "Вашу сесію скинуто! Тепер доступна нова 5-годинна сесія. Наступне скидання: %@.";
+"notification.weekly_reset.title" = "Тижневе скидання";
+"notification.weekly_reset.message" = "Ваш тижневий ліміт скинуто! Наступне скидання: %@.";
+"notification.weekly_reset.message_no_time" = "Ваш тижневий ліміт скинуто!";
 "notification.session_auto_started.title" = "Сесію запущено автоматично";
 "notification.session_auto_started.message" = "Нову сесію ініціалізовано автоматично. Ваша нова 5-годинна сесія готова!";
 "notification.session_auto_start_failed.title" = "Автозапуск не вдався";

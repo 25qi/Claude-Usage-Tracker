@@ -564,6 +564,10 @@
 "notification.session_critical.message" = "5시간 세션 한도의 %@를 사용했습니다! %@";
 "notification.session_reset.title" = "세션 리셋됨";
 "notification.session_reset.message" = "세션이 리셋되었습니다! 이제 새로운 5시간 세션을 사용할 수 있습니다.";
+"notification.session_reset.message_time" = "세션이 리셋되었습니다! 이제 새로운 5시간 세션을 사용할 수 있습니다. 다음 리셋: %@";
+"notification.weekly_reset.title" = "주간 리셋";
+"notification.weekly_reset.message" = "주간 한도가 리셋되었습니다! 다음 리셋: %@";
+"notification.weekly_reset.message_no_time" = "주간 한도가 리셋되었습니다!";
 "notification.weekly_warning.title" = "주간 사용량 경고";
 "notification.weekly_warning.message" = "주간 한도의 %@를 사용했습니다. %@";
 "notification.weekly_critical.title" = "주간 사용량 위험";
@@ -667,6 +671,7 @@
 "notifications.threshold.high" = "높은 사용량";
 "notifications.threshold.critical" = "위험";
 "notifications.threshold.session_reset" = "세션 리셋";
+"notifications.threshold.weekly_reset" = "주간 리셋";
 
 /* ==================== */
 /* MARK: - Updates Settings (Additional) */

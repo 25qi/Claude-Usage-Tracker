@@ -128,6 +128,7 @@
 "notifications.threshold.high" = "Utilizzo Elevato";
 "notifications.threshold.critical" = "Critico";
 "notifications.threshold.session_reset" = "Ripristino Sessione";
+"notifications.threshold.weekly_reset" = "Ripristino Settimanale";
 
 /* ==================== */
 /* MARK: - Setup Wizard */
@@ -208,6 +209,10 @@
 "notification.session_critical.message" = "Hai utilizzato %@ del limite della sessione di 5 ore! %@";
 "notification.session_reset.title" = "Ripristino Sessione";
 "notification.session_reset.message" = "La tua sessione è stata ripristinata! Ora hai una nuova sessione di 5 ore disponibile.";
+"notification.session_reset.message_time" = "La tua sessione è stata ripristinata! Ora hai una nuova sessione di 5 ore disponibile. Prossimo ripristino: %@.";
+"notification.weekly_reset.title" = "Ripristino Settimanale";
+"notification.weekly_reset.message" = "Il tuo limite settimanale è stato ripristinato! Prossimo ripristino: %@.";
+"notification.weekly_reset.message_no_time" = "Il tuo limite settimanale è stato ripristinato!";
 "notification.session_auto_started.title" = "Sessione Avviata Automaticamente";
 "notification.session_auto_started.message" = "Una nuova sessione è stata inizializzata automaticamente con Claude. La tua nuova sessione di 5 ore è pronta!";
 "notification.session_auto_start_failed.title" = "Avvio Automatico Fallito";

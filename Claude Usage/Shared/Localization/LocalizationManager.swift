@@ -89,6 +89,7 @@ enum LocalizationKey: String {
     case thresholdHigh = "notifications.threshold.high"
     case thresholdCritical = "notifications.threshold.critical"
     case thresholdSessionReset = "notifications.threshold.session_reset"
+    case thresholdWeeklyReset = "notifications.threshold.weekly_reset"
 
     // MARK: - Setup Wizard
     case welcomeTitle = "setup.welcome.title"
@@ -128,6 +129,10 @@ enum LocalizationKey: String {
     case notifSessionCriticalMessage = "notification.session_critical.message"
     case notifSessionResetTitle = "notification.session_reset.title"
     case notifSessionResetMessage = "notification.session_reset.message"
+    case notifSessionResetMessageTime = "notification.session_reset.message_time"
+    case notifWeeklyResetTitle = "notification.weekly_reset.title"
+    case notifWeeklyResetMessage = "notification.weekly_reset.message"
+    case notifWeeklyResetMessageNoTime = "notification.weekly_reset.message_no_time"
     case notifSessionAutoStartedTitle = "notification.session_auto_started.title"
     case notifSessionAutoStartedMessage = "notification.session_auto_started.message"
     case notifWeeklyWarningTitle = "notification.weekly_warning.title"
