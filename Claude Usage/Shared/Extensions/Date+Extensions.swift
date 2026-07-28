@@ -76,21 +76,27 @@ extension Date {
         return formatter.string(from: self)
     }
 
-    /// Returns time remaining rounded to full hours (e.g., "→2H", "→1H", "→<1H")
+    /// Returns time remaining with minute precision (e.g., "→1h35m", "→45m", "→<1m")
     func timeRemainingHoursString(from now: Date = Date()) -> String {
         let interval = self.timeIntervalSince(now)
 
         if interval <= 0 {
-            return "→<1H"
+            return "→<1m"
         }
 
-        // Less than 1 hour remaining
-        if interval < 3600 {
-            return "→<1H"
+        // 分鐘無條件進位,避免提早顯示 0
+        let totalMinutes = Int(ceil(interval / 60))
+
+        if totalMinutes < 1 {
+            return "→<1m"
+        }
+        if totalMinutes < 60 {
+            return "→\(totalMinutes)m"
         }
 
-        let hours = Int(ceil(interval / 3600))  // Round up to next hour
-        return "→\(hours)H"
+        let hours = totalMinutes / 60
+        let minutes = totalMinutes % 60
+        return minutes == 0 ? "→\(hours)h" : "→\(hours)h\(minutes)m"
     }
 
     /// Rounds date down to nearest minute (strips seconds)

@@ -94,6 +94,36 @@ final class DateExtensionsTests: XCTestCase {
         XCTAssertEqual(result, "< 1m")
     }
 
+    // MARK: - timeRemainingHoursString (menu bar countdown)
+
+    func testMenuBarCountdownHoursAndMinutes() {
+        let now = Date()
+        let future = now.addingTimeInterval(1 * 3600 + 35 * 60) // 1h35m
+
+        XCTAssertEqual(future.timeRemainingHoursString(from: now), "→1h35m")
+    }
+
+    func testMenuBarCountdownExactHours() {
+        let now = Date()
+        let future = now.addingTimeInterval(2 * 3600) // 2h exactly
+
+        XCTAssertEqual(future.timeRemainingHoursString(from: now), "→2h")
+    }
+
+    func testMenuBarCountdownMinutesOnly() {
+        let now = Date()
+        let future = now.addingTimeInterval(45 * 60) // 45m
+
+        XCTAssertEqual(future.timeRemainingHoursString(from: now), "→45m")
+    }
+
+    func testMenuBarCountdownPastOrImminent() {
+        let now = Date()
+
+        XCTAssertEqual(now.addingTimeInterval(-60).timeRemainingHoursString(from: now), "→<1m")
+        XCTAssertEqual(now.addingTimeInterval(20).timeRemainingHoursString(from: now), "→1m")
+    }
+
     // MARK: - Helpers
 
     private func createDate(year: Int, month: Int, day: Int, hour: Int) -> Date {

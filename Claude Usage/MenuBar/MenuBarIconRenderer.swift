@@ -111,6 +111,7 @@ final class MenuBarIconRenderer {
                 colorMode: colorMode,
                 singleColorHex: singleColorHex,
                 showIconName: showIconName,
+                showNextSessionTime: showNextSessionTime,
                 paceStatus: paceStatus,
                 showPaceMarker: showPaceMarker
             )
@@ -477,6 +478,7 @@ final class MenuBarIconRenderer {
         colorMode: MenuBarColorMode,
         singleColorHex: String,
         showIconName: Bool,
+        showNextSessionTime: Bool = false,
         paceStatus: PaceStatus? = nil,
         showPaceMarker: Bool = false
     ) -> NSImage {
@@ -489,6 +491,11 @@ final class MenuBarIconRenderer {
             fullText = "\(metricType.prefixText) \(metricData.displayText)"
         } else {
             fullText = metricData.displayText
+        }
+
+        // 百分比後面接重置倒數,例如「60% →1h35m」
+        if showNextSessionTime && metricType == .session, let resetTime = metricData.sessionResetTime {
+            fullText += " \(resetTime.timeRemainingHoursString())"
         }
 
         let attributes: [NSAttributedString.Key: Any] = [
