@@ -584,7 +584,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "Show time until next session";
-"metric.countdown_description" = "Display time remaining (e.g., →2H) in the icon";
+"metric.countdown_description" = "Display the reset time (e.g., →15:45) in the icon";
 
 /* ==================== */
 /* MARK: - Personal Usage (Additional) */

@@ -585,7 +585,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "顯示到下次 Session 的時間";
-"metric.countdown_description" = "在圖示中顯示剩餘時間（例如 →2H）";
+"metric.countdown_description" = "在圖示中顯示重置時間（例如 →15:45）";
 
 /* ==================== */
 /* MARK: - Personal Usage (Additional) */

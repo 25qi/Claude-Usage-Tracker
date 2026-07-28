@@ -76,28 +76,17 @@ extension Date {
         return formatter.string(from: self)
     }
 
-    /// Returns time remaining with minute precision (e.g., "→1h35m", "→45m", "→<1m")
-    func timeRemainingHoursString(from now: Date = Date()) -> String {
-        let interval = self.timeIntervalSince(now)
-
-        if interval <= 0 {
-            return "→<1m"
-        }
-
-        // 分鐘無條件進位,避免提早顯示 0
-        let totalMinutes = Int(ceil(interval / 60))
-
-        if totalMinutes < 1 {
-            return "→<1m"
-        }
-        if totalMinutes < 60 {
-            return "→\(totalMinutes)m"
-        }
-
-        let hours = totalMinutes / 60
-        let minutes = totalMinutes % 60
-        return minutes == 0 ? "→\(hours)h" : "→\(hours)h\(minutes)m"
+    /// Returns the reset clock time for the menu bar (e.g., "→15:45", or "→3:45 PM" on 12-hour systems)
+    func resetClockTimeString() -> String {
+        return "→" + Self.menuBarClockFormatter.string(from: self)
     }
+
+    // 快取 formatter,避免每次重畫都重新建立;"jm" 樣板會跟隨系統的 12/24 小時制設定
+    private static let menuBarClockFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("jm")
+        return formatter
+    }()
 
     /// Rounds date down to nearest minute (strips seconds)
     func roundedToNearestMinute() -> Date {

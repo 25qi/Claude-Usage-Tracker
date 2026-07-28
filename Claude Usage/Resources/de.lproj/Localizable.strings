@@ -604,7 +604,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "Zeit bis zur nächsten Sitzung anzeigen";
-"metric.countdown_description" = "Verbleibende Zeit (z.B. →2H) im Symbol anzeigen";
+"metric.countdown_description" = "Verbleibende Zeit (z.B. →15:45) im Symbol anzeigen";
 
 /* ==================== */
 /* MARK: - Personal Usage (Additional) */

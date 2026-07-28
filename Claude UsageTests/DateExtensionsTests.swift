@@ -94,34 +94,19 @@ final class DateExtensionsTests: XCTestCase {
         XCTAssertEqual(result, "< 1m")
     }
 
-    // MARK: - timeRemainingHoursString (menu bar countdown)
+    // MARK: - resetClockTimeString (menu bar reset time)
 
-    func testMenuBarCountdownHoursAndMinutes() {
-        let now = Date()
-        let future = now.addingTimeInterval(1 * 3600 + 35 * 60) // 1h35m
+    func testResetClockTimeStringFormat() {
+        // 用固定的 15:45 建日期;輸出格式依系統 12/24 小時制而異,
+        // 但一定以「→」開頭且包含分鐘數 45
+        var components = DateComponents()
+        (components.year, components.month, components.day) = (2026, 7, 28)
+        (components.hour, components.minute) = (15, 45)
+        let date = Calendar.current.date(from: components)!
 
-        XCTAssertEqual(future.timeRemainingHoursString(from: now), "→1h35m")
-    }
-
-    func testMenuBarCountdownExactHours() {
-        let now = Date()
-        let future = now.addingTimeInterval(2 * 3600) // 2h exactly
-
-        XCTAssertEqual(future.timeRemainingHoursString(from: now), "→2h")
-    }
-
-    func testMenuBarCountdownMinutesOnly() {
-        let now = Date()
-        let future = now.addingTimeInterval(45 * 60) // 45m
-
-        XCTAssertEqual(future.timeRemainingHoursString(from: now), "→45m")
-    }
-
-    func testMenuBarCountdownPastOrImminent() {
-        let now = Date()
-
-        XCTAssertEqual(now.addingTimeInterval(-60).timeRemainingHoursString(from: now), "→<1m")
-        XCTAssertEqual(now.addingTimeInterval(20).timeRemainingHoursString(from: now), "→1m")
+        let result = date.resetClockTimeString()
+        XCTAssertTrue(result.hasPrefix("→"), "should start with arrow, got: \(result)")
+        XCTAssertTrue(result.contains("45"), "should contain the minute component, got: \(result)")
     }
 
     // MARK: - Helpers

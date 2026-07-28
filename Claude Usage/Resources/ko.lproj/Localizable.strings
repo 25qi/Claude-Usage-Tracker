@@ -237,7 +237,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "다음 세션까지 시간 표시";
-"metric.countdown_description" = "아이콘에 남은 시간(예: →2H) 표시";
+"metric.countdown_description" = "아이콘에 남은 시간(예: →15:45) 표시";
 "metric.session_usage" = "세션 사용량";
 "metric.session_usage.description" = "5시간 롤링 윈도우 사용량";
 "metric.week_usage" = "주간 사용량";

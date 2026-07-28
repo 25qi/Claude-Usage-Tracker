@@ -585,7 +585,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "显示到下次会话的时间";
-"metric.countdown_description" = "在图标中显示剩余时间（例如 →2H）";
+"metric.countdown_description" = "在图标中显示剩余时间（例如 →15:45）";
 
 /* ==================== */
 /* MARK: - Personal Usage (Additional) */

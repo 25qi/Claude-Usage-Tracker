@@ -582,7 +582,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "Afficher le temps jusqu'à la prochaine session";
-"metric.countdown_description" = "Afficher le temps restant (ex., →2H) dans l'icône";
+"metric.countdown_description" = "Afficher le temps restant (ex., →15:45) dans l'icône";
 
 /* ==================== */
 /* MARK: - Personal Usage (Additional) */

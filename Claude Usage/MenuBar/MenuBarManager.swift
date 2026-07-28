@@ -6,8 +6,6 @@ class MenuBarManager: NSObject, ObservableObject {
     private var statusItem: NSStatusItem?  // Legacy - kept for backwards compatibility
     private var statusBarUIManager: StatusBarUIManager?
     private var refreshTimer: Timer?
-    // 每分鐘用快取資料重畫圖示,讓倒數顯示維持分鐘精度(不發網路請求)
-    private var iconRedrawTimer: Timer?
     @Published private(set) var usage: ClaudeUsage = .empty
     @Published private(set) var status: ClaudeStatus = .unknown
     @Published private(set) var apiUsage: APIUsage?
@@ -118,13 +116,6 @@ class MenuBarManager: NSObject, ObservableObject {
     func setup() {
         // Initialize cached appearance to avoid layout recursion
         cachedIsDarkMode = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-
-        // 每分鐘重畫一次圖示,讓倒數文字跟上分鐘精度(只用快取,不打 API)
-        iconRedrawTimer?.invalidate()
-        iconRedrawTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            self?.updateAllStatusBarIcons()
-        }
-        iconRedrawTimer?.tolerance = 5
 
         // Observe profile changes - CRITICAL: Set up before anything else
         observeProfileChanges()
@@ -273,8 +264,6 @@ class MenuBarManager: NSObject, ObservableObject {
         ShortcutManager.shared.stopListening()
         refreshTimer?.invalidate()
         refreshTimer = nil
-        iconRedrawTimer?.invalidate()
-        iconRedrawTimer = nil
         networkMonitor.stopMonitoring()
         autoStartService.stop()
         cancellables.removeAll()  // Clean up Combine subscriptions

@@ -598,7 +598,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "Mostrar tempo até a próxima sessão";
-"metric.countdown_description" = "Exibir tempo restante (ex., →2H) no ícone";
+"metric.countdown_description" = "Exibir tempo restante (ex., →15:45) no ícone";
 
 /* ==================== */
 /* MARK: - Personal Usage (Additional) */

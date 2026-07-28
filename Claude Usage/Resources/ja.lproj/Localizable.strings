@@ -604,7 +604,7 @@
 /* MARK: - Metric Card */
 /* ==================== */
 "metric.show_countdown" = "次のセッションまでの時間を表示";
-"metric.countdown_description" = "アイコンに残り時間（例：→2H）を表示";
+"metric.countdown_description" = "アイコンに残り時間（例：→15:45）を表示";
 
 /* ==================== */
 /* MARK: - Personal Usage (Additional) */

@@ -346,10 +346,10 @@ final class MenuBarIconRenderer {
         if showNextSessionTime && metricType == .session, let resetTime = metricData.sessionResetTime {
             if showIconName {
                 // Show "S (→2H)" when labels enabled
-                text = "S (\(resetTime.timeRemainingHoursString()))" as NSString
+                text = "S (\(resetTime.resetClockTimeString()))" as NSString
             } else {
                 // Show just "→2H" when labels disabled
-                text = resetTime.timeRemainingHoursString() as NSString
+                text = resetTime.resetClockTimeString() as NSString
             }
         } else if showIconName {
             // Show full word: "Session" or "Week"
@@ -450,7 +450,7 @@ final class MenuBarIconRenderer {
 
             // Draw session reset time inside the fill area if enabled and this is a session metric
             if showNextSessionTime && metricType == .session, let resetTime = metricData.sessionResetTime {
-                let timeString = resetTime.timeRemainingHoursString() as NSString
+                let timeString = resetTime.resetClockTimeString() as NSString
                 let timeFont = NSFont.systemFont(ofSize: 5.5, weight: .medium)
                 let timeAttributes: [NSAttributedString.Key: Any] = [
                     .font: timeFont,
@@ -482,7 +482,8 @@ final class MenuBarIconRenderer {
         paceStatus: PaceStatus? = nil,
         showPaceMarker: Bool = false
     ) -> NSImage {
-        let font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .semibold)  // Larger font
+        // 貼近系統選單列的字重與大小(等寬數字避免寬度跳動)
+        let font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .regular)
         let fillColor: NSColor = getColorForMode(colorMode, statusLevel: metricData.statusLevel, singleColorHex: singleColorHex, isDarkMode: isDarkMode)
 
         var fullText = ""
@@ -495,7 +496,7 @@ final class MenuBarIconRenderer {
 
         // 百分比後面接重置倒數,例如「60% →1h35m」
         if showNextSessionTime && metricType == .session, let resetTime = metricData.sessionResetTime {
-            fullText += " \(resetTime.timeRemainingHoursString())"
+            fullText += " \(resetTime.resetClockTimeString())"
         }
 
         let attributes: [NSAttributedString.Key: Any] = [
