@@ -215,6 +215,15 @@ struct Profile: Codable, Identifiable, Equatable {
         return !ClaudeCodeSyncService.shared.isTokenExpired(cliJSON)
     }
 
+    /// True if profile holds a CLI OAuth refresh token, so an expired access
+    /// token can be renewed without user interaction. Deliberately independent
+    /// of expiry: this is what keeps refresh paths reachable after the access
+    /// token lapses.
+    var hasRefreshableCLIOAuth: Bool {
+        guard let cliJSON = cliCredentialsJSON else { return false }
+        return ClaudeCodeSyncService.shared.extractRefreshToken(from: cliJSON) != nil
+    }
+
     var hasAnyCredentials: Bool {
         hasClaudeAI || hasAPIConsole || cliCredentialsJSON != nil || customKeychainServiceName != nil
     }
