@@ -987,8 +987,14 @@ class MenuBarManager: NSObject, ObservableObject {
 
         // Profile-local credentials (Claude.ai, API Console, saved CLI OAuth),
         // then the cached system Keychain CLI fallback.
+        //
+        // 過期但持有 refresh token 的憑證也要放行:自動續期寫在更新流程「裡面」
+        // (fetchUsageForProfile → ensureFreshCredentials),若在這裡就擋掉,
+        // token 一過期就再也沒有機會續期,選單列會永遠卡在最後一次的數字。
         return profile.hasUsageCredentials
+            || profile.hasRefreshableCLIOAuth
             || ClaudeCodeSyncService.shared.hasUsableSystemCredentials()
+            || ClaudeCodeSyncService.shared.hasRefreshableSystemCredentials()
     }
 
     private func setupMultiProfileMode() {
