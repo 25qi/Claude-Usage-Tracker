@@ -6,6 +6,9 @@ class MenuBarManager: NSObject, ObservableObject {
     private var statusItem: NSStatusItem?  // Legacy - kept for backwards compatibility
     private var statusBarUIManager: StatusBarUIManager?
     private var refreshTimer: Timer?
+    /// 上次重建選單列項目的時間,搭配冷卻時間避免誤判造成反覆重建
+    private var lastStatusItemRecreation: Date?
+    private static let statusItemRecreationCooldown: TimeInterval = 300
     @Published private(set) var usage: ClaudeUsage = .empty
     @Published private(set) var status: ClaudeStatus = .unknown
     @Published private(set) var apiUsage: APIUsage?
@@ -978,6 +981,36 @@ class MenuBarManager: NSObject, ObservableObject {
         return statusBarUIManager?.hasValidStatusBar ?? false
     }
 
+    /// Rebuilds the menu bar items if macOS has dropped them.
+    ///
+    /// The system occasionally removes status items after long sleep/wake
+    /// cycles without notifying the app, leaving it running and refreshing
+    /// normally with no visible icon. This runs off the existing refresh cycle
+    /// rather than a dedicated timer, so it costs one property read per refresh.
+    private func recreateStatusItemsIfDropped() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in self?.recreateStatusItemsIfDropped() }
+            return
+        }
+
+        guard let uiManager = statusBarUIManager, !uiManager.isStatusBarLive else { return }
+
+        // 冷卻時間:萬一存活判斷誤判,也不會每個週期都重建造成圖示閃爍
+        if let last = lastStatusItemRecreation,
+           Date().timeIntervalSince(last) < Self.statusItemRecreationCooldown {
+            return
+        }
+        lastStatusItemRecreation = Date()
+
+        LoggingService.shared.logWarning("MenuBarManager: status items were dropped by the system — recreating")
+
+        if profileManager.displayMode == .multi {
+            setupMultiProfileMode()
+        } else {
+            setupSingleProfileMode()
+        }
+    }
+
     /// Checks if ANY credentials are available for the active profile, including
     /// system Keychain CLI credentials. Mirrors the fallback logic in
     /// `ClaudeAPIService.getAuthentication()` so the refresh path isn't gated off
@@ -1257,6 +1290,9 @@ class MenuBarManager: NSObject, ObservableObject {
     }
 
     func refreshUsage() {
+        // 每次更新前順手確認圖示還在,掉了就重建(不另外開 timer)
+        recreateStatusItemsIfDropped()
+
         // In multi-profile mode, refresh ALL selected profiles
         if profileManager.displayMode == .multi {
             refreshAllSelectedProfiles()
