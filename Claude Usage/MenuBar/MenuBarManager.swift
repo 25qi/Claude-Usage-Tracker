@@ -1333,6 +1333,14 @@ class MenuBarManager: NSObject, ObservableObject {
             let previousAPIUsage = await MainActor.run { self.apiUsage }
             let currentProfileId = await MainActor.run { self.profileManager.activeProfile?.id }
 
+            // 單一 profile 走的是 apiService.fetchUsageData(),而 getAuthentication()
+            // 只會拒絕過期 token、不會自己續期(續期邏輯在多 profile 才用到的
+            // fetchUsageForProfile 裡)。先在這裡確保 token 新鮮,否則 access token
+            // 一過期,之後每個週期都只是重複失敗。
+            if let currentProfileId {
+                _ = await ClaudeCodeSyncService.shared.ensureFreshCredentials(for: currentProfileId)
+            }
+
             // Fetch usage and status in parallel
             async let usageResult = apiService.fetchUsageData()
             async let statusResult = statusService.fetchStatus()
