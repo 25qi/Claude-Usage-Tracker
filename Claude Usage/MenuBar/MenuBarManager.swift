@@ -6,7 +6,7 @@ class MenuBarManager: NSObject, ObservableObject {
     private var statusItem: NSStatusItem?  // Legacy - kept for backwards compatibility
     private var statusBarUIManager: StatusBarUIManager?
     private var refreshTimer: Timer?
-    /// 上次重建選單列項目的時間,搭配冷卻時間避免誤判造成反覆重建
+    /// 上次重建選單列項目的時間,避免短時間內重複重建
     private var lastStatusItemRecreation: Date?
     private static let statusItemRecreationCooldown: TimeInterval = 300
     @Published private(set) var usage: ClaudeUsage = .empty
@@ -787,6 +787,7 @@ class MenuBarManager: NSObject, ObservableObject {
             LoggingService.shared.log("MenuBarManager: Wake from sleep detected, refreshing after delay")
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
                 self?.lastAutoRefreshTime = Date()
+                self?.recreateStatusItemsAfterWake()
                 self?.refreshUsage()
             }
         }
@@ -981,28 +982,25 @@ class MenuBarManager: NSObject, ObservableObject {
         return statusBarUIManager?.hasValidStatusBar ?? false
     }
 
-    /// Rebuilds the menu bar items if macOS has dropped them.
+    /// Rebuilds the menu bar items after the machine wakes from sleep.
     ///
-    /// The system occasionally removes status items after long sleep/wake
-    /// cycles without notifying the app, leaving it running and refreshing
-    /// normally with no visible icon. This runs off the existing refresh cycle
-    /// rather than a dedicated timer, so it costs one property read per refresh.
-    private func recreateStatusItemsIfDropped() {
-        guard Thread.isMainThread else {
-            DispatchQueue.main.async { [weak self] in self?.recreateStatusItemsIfDropped() }
-            return
-        }
-
-        guard let uiManager = statusBarUIManager, !uiManager.isStatusBarLive else { return }
-
-        // 冷卻時間:萬一存活判斷誤判,也不會每個週期都重建造成圖示閃爍
+    /// macOS sometimes drops status items across a long sleep, leaving the app
+    /// running and refreshing normally with nothing drawn in the menu bar. The
+    /// dropped state cannot be detected from inside the process: the
+    /// NSStatusItem, its button and the button's window all survive with
+    /// `isVisible == true`, and CGWindowList does not expose third-party status
+    /// item windows at all (verified with a probe item that was definitely on
+    /// screen). So rather than testing for the condition, rebuild on the event
+    /// that precedes it. Wake is rare, and the rebuild is one teardown plus one
+    /// item creation, so this costs nothing between wakes.
+    private func recreateStatusItemsAfterWake() {
         if let last = lastStatusItemRecreation,
            Date().timeIntervalSince(last) < Self.statusItemRecreationCooldown {
             return
         }
         lastStatusItemRecreation = Date()
 
-        LoggingService.shared.logWarning("MenuBarManager: status items were dropped by the system — recreating")
+        LoggingService.shared.log("MenuBarManager: rebuilding status items after wake")
 
         if profileManager.displayMode == .multi {
             setupMultiProfileMode()
@@ -1290,9 +1288,6 @@ class MenuBarManager: NSObject, ObservableObject {
     }
 
     func refreshUsage() {
-        // 每次更新前順手確認圖示還在,掉了就重建(不另外開 timer)
-        recreateStatusItemsIfDropped()
-
         // In multi-profile mode, refresh ALL selected profiles
         if profileManager.displayMode == .multi {
             refreshAllSelectedProfiles()

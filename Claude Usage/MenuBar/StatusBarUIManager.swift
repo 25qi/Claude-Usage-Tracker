@@ -601,22 +601,6 @@ final class StatusBarUIManager {
         return false
     }
 
-    /// Whether at least one status item is actually placed in the menu bar.
-    ///
-    /// `hasValidStatusBar` only proves the objects exist. macOS can drop items
-    /// out of the menu bar (observed after long sleep/wake cycles) while leaving
-    /// the `NSStatusItem` and its button alive, so the app never notices the
-    /// icon is gone. A placed item always has a backing window behind its
-    /// button; a dropped one does not, which is what separates the two cases.
-    var isStatusBarLive: Bool {
-        let allItems = Array(statusItems.values) + Array(multiProfileStatusItems.values)
-
-        // 還沒建立任何項目時不算「掉失」,交給正常的 setup 流程處理
-        guard !allItems.isEmpty else { return true }
-
-        return allItems.contains { $0.isVisible && $0.button?.window != nil }
-    }
-
     /// Get button for a specific profile (multi-profile mode)
     func button(for profileId: UUID) -> NSStatusBarButton? {
         return multiProfileStatusItems[profileId]?.button
