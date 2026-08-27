@@ -1328,14 +1328,11 @@ class MenuBarManager: NSObject, ObservableObject {
             let previousAPIUsage = await MainActor.run { self.apiUsage }
             let currentProfileId = await MainActor.run { self.profileManager.activeProfile?.id }
 
-            // 單一 profile 走的是 apiService.fetchUsageData(),而 getAuthentication()
-            // 只會拒絕過期 token、不會自己續期(續期邏輯在多 profile 才用到的
-            // fetchUsageForProfile 裡)。先在這裡確保 token 新鮮,否則 access token
-            // 一過期,之後每個週期都只是重複失敗。
-            if let currentProfileId {
-                _ = await ClaudeCodeSyncService.shared.ensureFreshCredentials(for: currentProfileId)
-            }
-
+            // 這裡刻意「不」主動續期 CLI 的 OAuth token。refresh token 用過即失效,
+            // 而 Claude Code 自己也在輪替同一串憑證;兩邊搶著換會被伺服器判定為
+            // 重複使用,整串憑證作廢,使用者被迫重新 claude login(實際發生過)。
+            // CLI 閒置導致 token 過期時,只要使用者下次使用 Claude Code,CLI 就會
+            // 自行換發新 token,這裡下一個週期讀到新的就會自動恢復。
             // Fetch usage and status in parallel
             async let usageResult = apiService.fetchUsageData()
             async let statusResult = statusService.fetchStatus()
