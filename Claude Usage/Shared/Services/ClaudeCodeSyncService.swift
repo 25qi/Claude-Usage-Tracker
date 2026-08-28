@@ -37,7 +37,6 @@ class ClaudeCodeSyncService {
     /// Keychain access is a blocking XPC round-trip, and UI render paths
     /// (updateAllButtons, popover gating) ask this on every repaint.
     private var systemCredsUsableCache: (value: Bool, checkedAt: Date)?
-    private var systemCredsRefreshableCache: (value: Bool, checkedAt: Date)?
     private static let systemCredsCacheMaxAge: TimeInterval = 15
 
     /// Returns whether the system keychain/credentials file holds a
@@ -64,36 +63,10 @@ class ClaudeCodeSyncService {
         return usable
     }
 
-    /// Returns whether the system keychain/credentials file holds a refresh
-    /// token, meaning an expired access token can be renewed without any user
-    /// interaction. Callers use this to keep refresh paths reachable while the
-    /// access token is expired; `hasUsableSystemCredentials()` stays the check
-    /// for "can authenticate right now".
-    func hasRefreshableSystemCredentials() -> Bool {
-        if let cached = systemCredsRefreshableCache,
-           Date().timeIntervalSince(cached.checkedAt) < Self.systemCredsCacheMaxAge {
-            return cached.value
-        }
-
-        var refreshable = false
-        do {
-            if let creds = try readSystemCredentials(),
-               extractRefreshToken(from: creds) != nil {
-                refreshable = true
-            }
-        } catch {
-            LoggingService.shared.log("hasRefreshableSystemCredentials: system keychain check failed: \(error.localizedDescription)")
-        }
-
-        systemCredsRefreshableCache = (refreshable, Date())
-        return refreshable
-    }
-
     /// Drops the cached availability answer (call after syncs/logins that
     /// change the keychain state).
     func invalidateSystemCredentialsCache() {
         systemCredsUsableCache = nil
-        systemCredsRefreshableCache = nil
     }
 
     // MARK: - System Credentials Access (Fallback Chain)
